@@ -20,7 +20,7 @@ resource "google_cloud_scheduler_job" "scheduler" {
     body        = var.http_body
     headers     = var.http_headers
     dynamic "oidc_token" {
-      for_each = compact([try(var.http_oidc_token.service_account_email, null), try(var.http_oidc_token.audience, null)])
+      for_each = compact([try(var.http_oidc_token.service_account_email, null) && try(var.http_oidc_token.audience, null) ? 1 : null])
       content {
         service_account_email = try(var.http_oidc_token.service_account_email, null)
         audience              = try(var.http_oidc_token.audience, null)
